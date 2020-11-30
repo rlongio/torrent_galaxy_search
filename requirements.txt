@@ -13,7 +13,6 @@ pyparsing==2.4.7
 pytest==6.1.2
 pytest-cov==2.10.1
 requests==2.25.0
--e git+git@github.com:rlongio/torrent_galaxy_search.git@381ef907526eafc0154936d12f32ca2cda22244a#egg=sampleproject
 soupsieve==2.0.1
 toml==0.10.2
 urllib3==1.26.2
