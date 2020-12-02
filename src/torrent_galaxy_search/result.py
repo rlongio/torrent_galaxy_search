@@ -1,7 +1,5 @@
-from typing import Union
+from typing import List, Union
 from bs4 import BeautifulSoup, element
-import requests
-import os
 
 
 class Result:
@@ -10,13 +8,16 @@ class Result:
     def __init__(self, data: Union[str, element.Tag]):
         self.soup = self._get_soup(str(data))
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<{self.__class__.__name__}: {self.soup}>"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.name}: {self.quality} {self.language} {self.size} {self.health}"
 
-    def _get_soup(self, _html: str):
+    def __getitem__(self, key):
+        return getattr(Result, key)
+
+    def _get_soup(self, _html: str) -> BeautifulSoup:
         return BeautifulSoup(_html, "html.parser")
 
     @property
@@ -74,5 +75,7 @@ class Result:
     def health(self) -> str:
         return self.seeders + self.leachers
 
-
-
+    @classmethod
+    def sort(cls, results: List["Result"], property: str) -> List["Result"]:
+        results.sort(key=lambda x: str(x[property]), reverse=True)
+        return results
