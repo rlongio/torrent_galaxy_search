@@ -1,9 +1,14 @@
 from typing import List, Union
 from bs4 import BeautifulSoup, element
+import requests
+from requests.models import Response
 
 
 class Result:
     """Encapsulates a search result."""
+
+    # Galaxy Torrents base URL for search
+    ROOT_URL = "https://torrentgalaxy.to/torrents.php?search="
 
     def __init__(self, data: Union[str, element.Tag]):
         self.soup = self._get_soup(str(data))
@@ -73,9 +78,55 @@ class Result:
 
     @property
     def health(self) -> str:
+        """Seeders + Leachers"""
         return self.seeders + self.leachers
 
     @classmethod
-    def sort(cls, results: List["Result"], property: str) -> List["Result"]:
-        results.sort(key=lambda x: str(x[property]), reverse=True)
+    def sort(
+        cls, results: List["Result"], property: str, reverse: bool = False
+    ) -> List["Result"]:
+        """Sorts list based on property
+
+        Args:
+            results (List['Result']): results to be sorted
+
+            property (str): property to be sorted on
+
+            reverse (bool): get results in reverse order
+
+        Returns:
+            List[Result]: Sorted list of results
+        """
+
+        results.sort(key=lambda x: str(x[property]), reverse=reverse)
         return results
+
+    @classmethod
+    def search(cls, imdb_id: str) -> List["Result"]:
+        """Fetches results based on imdb_id
+
+        Args:
+            imdb_id (str): imdb ID
+
+        Returns:
+            List[Result]: list of Result objects
+        """
+        soup: BeautifulSoup = _get_soup(f"{cls.ROOT_URL}{imdb_id}")
+
+        results: List["Result"] = []
+        for link in soup.find_all("div", class_="tgxtablerow"):
+            results.append(Result(link))
+
+        return results
+
+
+def _get_soup(request_url: str) -> BeautifulSoup:
+    """Makes request
+
+    Args:
+        request_url (str): url destination
+
+    Returns:
+        BeautifulSoup: results
+    """
+    return BeautifulSoup(requests.get(request_url).text, features="html.parser")
