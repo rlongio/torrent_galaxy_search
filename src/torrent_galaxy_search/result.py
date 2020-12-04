@@ -110,9 +110,12 @@ class Result:
 
         Returns:
             List[Result]: list of Result objects
+
+        TODO: Memoize cacheing possible?
         """
         soup: BeautifulSoup = _get_soup(f"{cls.ROOT_URL}{imdb_id}")
 
+        print(type(soup))
         results: List["Result"] = []
         for link in soup.find_all("div", class_="tgxtablerow"):
             results.append(Result(link))
