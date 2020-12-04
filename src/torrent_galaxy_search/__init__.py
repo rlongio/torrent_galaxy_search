@@ -1,12 +1,13 @@
-from torrent_galaxy_search.result import Result
+from typing import List
+from torrent_galaxy_search.search import Search, Result
 
 
 def main():
-    results = Result.search("tt0095016")
+    results: List[Result] = Search.by_IMDB_ID("tt0095016")
 
     for r in results:
         print("----------------------")
-        print(r)
+        print(r.views)
         print(r.magnet_url)
 
 
