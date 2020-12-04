@@ -16,12 +16,11 @@ __pycache__/
 /venv
 /.venv
 
-# html test coverage
-htmlcov/
-
 # coverage files
 .coverage
 
 # pycharm files
 .idea/
 
+# coverage reports
+/htmlcov
