@@ -20,7 +20,7 @@ class Result:
         return f"{self.name}: {self.quality} {self.language} {self.size} {self.health}"
 
     def __getitem__(self, key):
-        return getattr(Result, key)
+        return getattr(self, key)
 
     def _get_soup(self, _html: str) -> BeautifulSoup:
         return BeautifulSoup(_html, "html.parser")
@@ -81,9 +81,9 @@ class Result:
         """Seeders + Leachers"""
         return self.seeders + self.leachers
 
-    @classmethod
+    @staticmethod
     def sort(
-        cls, results: List["Result"], property: str, reverse: bool = False
+        results: List["Result"], property: str, reverse: bool = False
     ) -> List["Result"]:
         """Sorts list based on property
 
