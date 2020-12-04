@@ -7,7 +7,7 @@ class Result:
     """Encapsulates a search result."""
 
     def __init__(self, data: Union[str, element.Tag]):
-        self._soup = _get_soup(str(data))
+        self._soup = self._get_soup(str(data))
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}: {self._soup}>"
@@ -17,6 +17,9 @@ class Result:
 
     def __getitem__(self, key):
         return getattr(self, key)
+
+    def _get_soup(self, _html: str) -> BeautifulSoup:
+        return BeautifulSoup(_html, "html.parser")
 
     @property
     def language(self) -> str:
